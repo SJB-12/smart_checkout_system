@@ -1,0 +1,42 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.5) url('C:/Users/Suman_PC/Documents/GitHub/IOT_PBL/bg_img.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+h1 {
+    text-align: left;
+    padding-left: 20px;
+    color: black;
+    font-size: 50px;
+    /* Set color to contrast with the background image */
+}
+
+.container {
+    display: grid;
+    place-items: center;
+    /* Centers both horizontally and vertically */
+    height: 70vh;
+    /* Full viewport height */
+}
+
+.button {
+    display: inline-block;
+    padding: 20px 30px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 30px;
+    transition: transform 0.2s ease, background-color 0.5s ease;
+}
+
+.button:active {
+    transform: scale(0.7);
+    /* Slightly scales down the button */
+    background-color: #45a049;
+    /* Darker background color on click */
+
+}
