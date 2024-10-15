@@ -13,16 +13,19 @@
 }
 
 .navbar {
-    width: 90%;
+    width: 100% 90%;
+    background-color: rgba(108, 255, 115,0.5) ;
     margin: auto;
-    padding: 40px 0;
+    padding: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
 .headline {
-    font-size: 60px;
+    font-size: 40px;
     cursor: pointer;
     color: white;
 }
@@ -31,6 +34,7 @@
     list-style: none;
     display: inline-block;
     margin: 0 20px;
+    position:relative;
 }
 
 .navbar ul li a {
@@ -93,7 +97,7 @@ span {
 
 }
 
-button hover span {
+button:hover span {
     width: 100%;
 
 }
