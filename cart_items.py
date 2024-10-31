@@ -1,5 +1,6 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+import cv2
 
 root= tk.Tk()
 root.title("Smart Checkout System")
@@ -30,12 +31,61 @@ heading_frame_bg = ImageTk.PhotoImage(heading_frame)
 
 canvas.create_image(50,40, image = heading_frame_bg,anchor = "nw")
 
-left_frame = tk.Frame(root, width=420, height=550, bg="lightblue")
-right_frame = tk.Frame(root, width=420, height=550, bg="lightgreen")
+frame_1 = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\frame_1.png")
+frame_1 = frame_1.resize((480,200), Image.ANTIALIAS)
+frame1_bg = ImageTk.PhotoImage(frame_1)
 
+canvas.create_image(50,140, image = frame1_bg,anchor = "nw")
 
-canvas.create_window(100, 150, anchor="nw", window=left_frame)   # Left frame position
-canvas.create_window(600, 150, anchor="nw", window=right_frame)
+frame_2 = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\frame_2.png")
+frame_2 = frame_2.resize((480,300), Image.ANTIALIAS)
+frame2_bg = ImageTk.PhotoImage(frame_2)
 
+canvas.create_image(50,360, image = frame2_bg,anchor = "nw")
+
+frame_3 = tk.Canvas(root, width=480, height=520)
+frame_3.place(x=550, y=140)
+
+# Add background image to frame_3
+frame_3_image = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\frame_3.png")
+frame_3_image = frame_3_image.resize((480, 520), Image.ANTIALIAS)
+frame3_bg = ImageTk.PhotoImage(frame_3_image)
+frame_3.create_image(0, 0, image=frame3_bg, anchor="nw")
+
+# Initialize camera
+cap = cv2.VideoCapture(0)
+
+def show_camera():
+    ret, frame = cap.read()  # Capture frame-by-frame
+    if ret:
+        # Convert the frame to RGB format (Tkinter uses RGB)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        img = Image.fromarray(frame)
+        imgtk = ImageTk.PhotoImage(image=img)
+
+        # Update camera label with new frame
+        camera_label.imgtk = imgtk  # Keep a reference
+        camera_label.config(image=imgtk)
+
+    # Schedule the function to run again after a short delay
+    camera_label.after(10, show_camera)
+
+# Create a Label widget on frame_3 to display the camera feed
+camera_label = tk.Label(frame_3)
+camera_label.place(x=30, y=90, width=420, height=310)  # Adjust as necessary
+show_camera()
+
+canvas.create_image(550,140, image = frame3_bg,anchor = "nw")
+
+submit_button = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\Submit_button.png")
+submit_button = submit_button.resize((110, 40), Image.ANTIALIAS)
+submit_bg = ImageTk.PhotoImage(submit_button)
+
+def button_action():
+    print("Button clicked!")
+
+sbutton = tk.Button(root, image=submit_bg, command=button_action, borderwidth=0)
+
+sbutton.place(x=60, y=280)
 
 root.mainloop()
