@@ -77,15 +77,50 @@ show_camera()
 
 canvas.create_image(550,140, image = frame3_bg,anchor = "nw")
 
-submit_button = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\Submit_button.png")
-submit_button = submit_button.resize((110, 40), Image.ANTIALIAS)
-submit_bg = ImageTk.PhotoImage(submit_button)
+
 
 def button_action():
     print("Button clicked!")
 
-sbutton = tk.Button(root, image=submit_bg, command=button_action, borderwidth=0)
+def submit_action():
+    name = name_entry.get()
+    contact = contact_entry.get()
+    
+    # Append data to CSV file
+    with open('details.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([name, contact])
+    
+    # Clear entry fields after submission
+    name_entry.delete(0, tk.END)
+    contact_entry.delete(0, tk.END)
 
-sbutton.place(x=60, y=280)
+def reset_action():
+    # Clear entry fields
+    name_entry.delete(0, tk.END)
+    contact_entry.delete(0, tk.END)
+
+
+
+submit_button = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\Submit_button.png")
+submit_button = submit_button.resize((110, 40), Image.ANTIALIAS)
+submit_bg = ImageTk.PhotoImage(submit_button)
+sbutton = tk.Button(root, image=submit_bg, command=submit_action, borderwidth=0)
+sbutton.place(x=70, y=280)
+
+reset_button = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\Reset_button.png")
+reset_button = reset_button.resize((110, 40), Image.ANTIALIAS)
+reset_bg = ImageTk.PhotoImage(reset_button)
+rbutton = tk.Button(root, image=reset_bg, command=reset_action, borderwidth=0)
+rbutton.place(x=200, y=280)
+
+add_button = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\Add_button.png")
+add_button = add_button.resize((150, 50), Image.ANTIALIAS)
+add_bg = ImageTk.PhotoImage(add_button)
+
+abutton = tk.Button(root, image=add_bg, command=button_action, borderwidth=0)
+abutton.place(x=580, y=570)
+
+
 
 root.mainloop()
