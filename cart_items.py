@@ -11,8 +11,8 @@ root.title("Smart Checkout System")
 root.geometry("1080x720")
 
 #bg of the application
-bg_image = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\bg_img.jpg")
-bg_image = bg_image.resize((1080, 720), Image.ANTIALIAS)
+bg_image = Image.open(r"assets\bg_img.jpg")
+bg_image = bg_image.resize((1080, 720), Image.Resampling.LANCZOS)
 
 bg = ImageTk.PhotoImage(bg_image)
 
@@ -22,21 +22,21 @@ canvas.pack(fill = "both", expand = True)
 canvas.create_image(0,0,image = bg, anchor="nw")
 
 #making the main frame
-main_frame = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\main_frame.png")
-main_frame = main_frame.resize((1000, 650), Image.ANTIALIAS)
+main_frame = Image.open(r"assets\main_frame.png")
+main_frame = main_frame.resize((1000, 650), Image.Resampling.LANCZOS)
 main_frame_bg = ImageTk.PhotoImage(main_frame)
 
 canvas.create_image(40,25, image=main_frame_bg,anchor="nw")
 
 #making heading frame
-heading_frame = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\heading_frame.png")
-heading_frame = heading_frame.resize((980,70), Image.ANTIALIAS)
+heading_frame = Image.open(r"assets\heading_frame.png")
+heading_frame = heading_frame.resize((980,70), Image.Resampling.LANCZOS)
 heading_frame_bg = ImageTk.PhotoImage(heading_frame)
 canvas.create_image(50,40, image = heading_frame_bg,anchor = "nw")
 
 #making 1st frame on left side
-frame_1 = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\frame_1.png")
-frame_1 = frame_1.resize((480,200), Image.ANTIALIAS)
+frame_1 = Image.open(r"assets\frame_1.png")
+frame_1 = frame_1.resize((480,200), Image.Resampling.LANCZOS)
 frame1_bg = ImageTk.PhotoImage(frame_1)
 canvas.create_image(50,140, image = frame1_bg,anchor = "nw")
 
@@ -76,8 +76,8 @@ contact_entry = tk.Entry(
 contact_entry.place(x=180, y=240)
 
 #making 2nd frame on left side of the main frame
-frame_2 = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\frame_2.png")
-frame_2 = frame_2.resize((480,300), Image.ANTIALIAS)
+frame_2 = Image.open(r"assets\frame_2.png")
+frame_2 = frame_2.resize((480,300), Image.Resampling.LANCZOS)
 frame2_bg = ImageTk.PhotoImage(frame_2)
 canvas.create_image(50,360, image = frame2_bg,anchor = "nw")
 
@@ -86,8 +86,8 @@ frame_3 = tk.Canvas(root, width=480, height=520)
 frame_3.place(x=550, y=140)
 
 # Add background image to frame_3
-frame_3_image = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\frame_3.png")
-frame_3_image = frame_3_image.resize((480, 520), Image.ANTIALIAS)
+frame_3_image = Image.open(r"assets\frame_3.png")
+frame_3_image = frame_3_image.resize((480, 520), Image.Resampling.LANCZOS)
 frame3_bg = ImageTk.PhotoImage(frame_3_image)
 frame_3.create_image(0, 0, image=frame3_bg, anchor="nw")
 
@@ -162,22 +162,22 @@ def reset_action():
     name_entry.focus()  # Set focus back to name field
 
 #submit button in 1st frame
-submit_button = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\Submit_button.png")
-submit_button = submit_button.resize((100, 35), Image.ANTIALIAS)
+submit_button = Image.open(r"assets\Submit_button.png")
+submit_button = submit_button.resize((100, 35), Image.Resampling.LANCZOS)
 submit_bg = ImageTk.PhotoImage(submit_button)
 sbutton = tk.Button(root, image=submit_bg, command=submit_action, borderwidth=0)
 sbutton.place(x=70, y=290)
 
 #reset button in 2nd frame
-reset_button = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\Reset_button.png")
-reset_button = reset_button.resize((100, 35), Image.ANTIALIAS)
+reset_button = Image.open(r"assets\Reset_button.png")
+reset_button = reset_button.resize((100, 35), Image.Resampling.LANCZOS)
 reset_bg = ImageTk.PhotoImage(reset_button)
 rbutton = tk.Button(root, image=reset_bg, command=reset_action, borderwidth=0)
 rbutton.place(x=180, y=290)
 
 #add button in 3rd frame
-add_button = Image.open(r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\assets\Add_button.png")
-add_button = add_button.resize((150, 50), Image.ANTIALIAS)
+add_button = Image.open(r"assets\Add_button.png")
+add_button = add_button.resize((150, 50), Image.Resampling.LANCZOS)
 add_bg = ImageTk.PhotoImage(add_button)
 abutton = tk.Button(root, image=add_bg, command=button_action, borderwidth=0)
 abutton.place(x=580, y=570)
