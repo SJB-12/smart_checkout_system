@@ -1,9 +1,0 @@
-names:
-- object_1
-- object_2
-- object_3
-- object_4
-nc: 4
-path: ''
-train: D:\projects\smart_checkout_system\datasets\train
-val: D:\projects\smart_checkout_system\datasets\val
