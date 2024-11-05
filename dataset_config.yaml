@@ -1,0 +1,8 @@
+names:
+- appy
+- lays_orange_pack
+- maggi
+- monaco
+nc: 4
+train: C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\model_files\yolo_dataset_20241105_134756\train\images
+val: C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\model_files\yolo_dataset_20241105_134756\train\images

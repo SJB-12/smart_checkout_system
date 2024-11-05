@@ -1,73 +1,91 @@
-import tensorflow as tf
-import cv2
-import numpy as np
 import os
-from tensorflow.keras.preprocessing.image import img_to_array
+import yaml
+from pathlib import Path
+import torch
+import subprocess
+import shutil
 
-# Set paths for dataset and YOLO configuration files
-dataset_path = r"D:\projects\smart_checkout_system\augmented_datasets"
-model_save_path = r"D:\projects\smart_checkout_system\yolo_model_output\cart_model.h5"
+def setup_yolov5():
+    """Clone YOLOv5 if it doesn't exist and install requirements"""
+    if not os.path.exists('yolov5'):
+        subprocess.run(['git', 'clone', 'https://github.com/ultralytics/yolov5.git'])
+    
+    # Install requirements
+    subprocess.run(['pip', 'install', '-r', 'yolov5/requirements.txt'])
 
-# YOLO model parameters
-IMG_SIZE = (416, 416)  # Size required by YOLO
-BATCH_SIZE = 8
-EPOCHS = 30
-NUM_CLASSES = 4  # Adjust this based on your dataset
+def prepare_training_data(labeled_data_path):
+    """Prepare the data configuration file for training"""
+    # Find data.yaml in the labeled data directory
+    data_yaml_path = os.path.join(labeled_data_path, 'data.yaml')
+    
+    if not os.path.exists(data_yaml_path):
+        raise FileNotFoundError(f"data.yaml not found in {labeled_data_path}")
+    
+    # Load and modify the data.yaml file
+    with open(data_yaml_path, 'r') as f:
+        data_config = yaml.safe_load(f)
+    
+    # Update paths to be absolute
+    data_config['train'] = str(Path(labeled_data_path) / 'train' / 'images')
+    data_config['val'] = str(Path(labeled_data_path) / 'train' / 'images')  # Using same for validation
+    
+    # Save modified config
+    modified_yaml_path = 'dataset_config.yaml'
+    with open(modified_yaml_path, 'w') as f:
+        yaml.dump(data_config, f)
+    
+    return modified_yaml_path, data_config['nc']
 
-# Preprocessing function
-def preprocess_image(image_path):
-    """Read and preprocess an image for YOLO"""
-    image = cv2.imread(image_path)
-    if image is None:
-        return None
-    # Resize to required YOLO input size
-    image_resized = cv2.resize(image, IMG_SIZE)
-    # Normalize the image to [0, 1] range for YOLO
-    image_normalized = image_resized / 255.0
-    return image_normalized
+def train_yolo(data_yaml_path, num_classes, epochs=20, batch_size=16, img_size=640):
+    """Train YOLOv5 model"""
+    # Select appropriate model size based on dataset
+    if num_classes < 5:
+        model_type = 'yolov5s'  # Small model for simple datasets
+    elif num_classes < 20:
+        model_type = 'yolov5m'  # Medium model for moderate datasets
+    else:
+        model_type = 'yolov5l'  # Large model for complex datasets
+    
+    print(f"Training {model_type} model for {num_classes} classes...")
+    
+    # Training command
+    train_command = [
+        'python', 'yolov5/train.py',
+        '--img', str(img_size),
+        '--batch', str(batch_size),
+        '--epochs', str(epochs),
+        '--data', data_yaml_path,
+        '--weights', f'{model_type}.pt',
+        '--cache'
+    ]
+    
+    # Run training
+    subprocess.run(train_command)
 
-def load_data(dataset_path):
-    """Load and preprocess images and labels from dataset"""
-    images = []
-    labels = []
-    class_folders = os.listdir(dataset_path)
-    label_map = {name: idx for idx, name in enumerate(class_folders)}  # Map each folder name to a unique integer
+def main():
+    # Path to your labeled dataset
+    labeled_data_path = r"C:\Users\Suman_PC\Documents\GitHub\smart_checkout_system\model_files\yolo_dataset_20241105_134756"  # Update this with your dataset timestamp
+    
+    try:
+        # Setup YOLOv5
+        setup_yolov5()
+        
+        # Prepare data
+        data_yaml_path, num_classes = prepare_training_data(labeled_data_path)
+        
+        # Train model
+        train_yolo(
+            data_yaml_path=data_yaml_path,
+            num_classes=num_classes,
+            epochs=10,
+            batch_size=16,  # Adjust based on your GPU memory
+            img_size=640
+        )
+        
+        print("Training completed! Check the 'runs/train' folder for results.")
+        
+    except Exception as e:
+        print(f"Error during training: {str(e)}")
 
-    for class_folder in class_folders:
-        class_path = os.path.join(dataset_path, class_folder)
-        if not os.path.isdir(class_path):
-            continue
-
-        label = label_map[class_folder]  # Get the label from the map
-        for img_file in os.listdir(class_path):
-            img_path = os.path.join(class_path, img_file)
-            processed_image = preprocess_image(img_path)
-            if processed_image is not None:
-                images.append(processed_image)
-                labels.append(label)
-
-    images = np.array(images, dtype="float32")
-    labels = np.array(labels)
-    return images, labels
-
-
-# Load dataset
-train_images, train_labels = load_data(dataset_path)
-train_labels = tf.keras.utils.to_categorical(train_labels, NUM_CLASSES)  # One-hot encode labels
-
-# Build YOLOv4-tiny model (simplified, can customize if using pre-trained weights)
-model = tf.keras.applications.MobileNetV2(input_shape=IMG_SIZE + (3,), weights='imagenet', include_top=False)
-model = tf.keras.models.Sequential([
-    model,
-    tf.keras.layers.GlobalAveragePooling2D(),
-    tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')
-])
-
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
-# Train the model
-model.fit(train_images, train_labels, batch_size=BATCH_SIZE, epochs=EPOCHS, validation_split=0.2)
-
-# Save the model
-model.save(model_save_path)
-print("Model saved successfully!")
+if __name__ == "__main__":
+    main()
