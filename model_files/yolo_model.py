@@ -78,7 +78,7 @@ def main():
             data_yaml_path=data_yaml_path,
             num_classes=num_classes,
             epochs=10,
-            batch_size=16,  # Adjust based on your GPU memory
+            batch_size=8,  # Adjust based on your GPU memory
             img_size=640
         )
         
